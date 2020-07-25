@@ -1,0 +1,140 @@
+from Classes import InventoryClass, InventoryListClass, SiparisListClass
+
+import pandas as pd
+from pandas import DataFrame
+from datetime import date
+
+today = date.today()
+d1 = today.strftime("%d/%m/%Y")
+
+while True:
+    number=int(input("\nENVANTER YÖNETİM\n 1.Envanter\n 2.Sipariş\n 3.İşçilik\n 0.Çıkış\n"))
+    if number==0:
+        break
+
+    if number==1:
+        while True:
+            number1=int(input("1. Envanteri görüntüle\n2. Envanteri güncelle\n3. Ürün bilgisi\n0. Üst menüye dön\n"))
+            if number1==1:
+                for obj in InventoryListClass.getinstances():
+                    print("Kod:", obj.inventory_code, "    Ürün adı:", obj.inventory_name, "    Miktar:",
+                          obj.inventory_amount, obj.inventory_unit, "    Yer:", obj.inventory_location)
+
+            if number1==2:
+                print(":(")
+
+            if number1==3:
+                print(":(")
+            else:
+                break
+
+    if number==2:
+        while True:
+
+            number2=int(input("1. Sipariş durumu\n2. Sipariş gir\n3. Sipariş gönder\n0. Üst menüye dön\n"))
+            df5 = pd.read_excel('siparis_guncel.xlsx')
+            Siparisguncel_siparisno = df5['Siparisguncel_siparisno'].tolist()
+            Siparisguncel_urunkodu = df5["Siparisguncel_urunkodu"].tolist()
+            Siparisguncel_urunadi = df5["Siparisguncel_urunadi"].tolist()
+            Siparisguncel_adet = df5["Siparisguncel_adet"].tolist()
+            Siparisguncel_tarih = df5["Siparisguncel_tarih"].tolist()
+
+
+
+            if number2==1:
+                for obj in SiparisListClass.getinstances():
+                    print("Sipariş Kodu:", obj.Siparisguncel_siparisno, "    Ürün kodu:", obj.Siparisguncel_urunkodu,
+                          "    Ürün adı:",
+                          obj.Siparisguncel_urunadi, "    Adet:", obj.Siparisguncel_adet, "    Tarih:",
+                          obj.Siparisguncel_tarih)
+            if number2==2:
+                df = pd.read_excel('siparis_gelen.xlsx')
+
+                Siparisgelen_siparisno= df['Siparisgelen_siparisno'].tolist()
+                Siparisgelen_urunkodu=df["Siparisgelen_urunkodu"].tolist()
+                Siparisgelen_urunadi= df["Siparisgelen_urunadi"].tolist()
+                Siparisgelen_adet= df["Siparisgelen_adet"].tolist()
+                Siparisgelen_tarih= df["Siparisgelen_tarih"].tolist()
+
+                a = int(input("Siparis numarasi: "))
+                b = int(input("Urun sayisi: "))
+
+                i = 0
+                while i < b:
+                    Siparisgelen_siparisno.append(a)
+                    Siparisgelen_tarih.append(d1)
+                    Siparisguncel_tarih.append(d1)
+                    c=int(input("Urun kodu: "))
+                    Siparisgelen_urunkodu.append(c)
+                    Siparisguncel_urunkodu.append(c)
+                    d = str(input('Urun adi: '))
+                    Siparisgelen_urunadi.append(d)
+                    Siparisguncel_urunadi.append(d)
+                    e = int(input('Adet: '))
+                    Siparisgelen_adet.append(e)
+                    Siparisguncel_adet.append(e)
+                    print("Ürün başarılı bir şekilde girildi.")
+                    i += 1
+                    print(Siparisguncel_urunadi)
+                    p = zip(Siparisgelen_siparisno,Siparisgelen_urunkodu, Siparisgelen_urunadi,
+                            Siparisgelen_adet, Siparisgelen_tarih)
+                    df2 = DataFrame(p)
+                    df2.columns = ["Siparisgelen_siparisno","Siparisgelen_urunkodu", "Siparisgelen_urunadi",
+                                   "Siparisgelen_adet", "Siparisgelen_tarih"]
+
+                    writer = pd.ExcelWriter('siparis_gelen.xlsx', engine='xlsxwriter')
+                    df2.to_excel(writer, sheet_name='Sheet1')
+
+                    p2=zip(Siparisguncel_siparisno, Siparisguncel_urunkodu, Siparisguncel_urunadi,
+                           Siparisguncel_adet, Siparisguncel_tarih)
+                    df5=DataFrame(p2)
+                    df5.columns=["Siparisguncel_siparisno","Siparisguncel_urunkodu","Siparisguncel_urunadi",
+                                 "Siparisguncel_adet","Siparisguncel_tarih"]
+
+                    writer2=pd.ExcelWriter("siparis_guncel2.xlsx", engine="xlsxwriter")
+                    df5.to_excel(writer, sheet_name="Sheet2")
+                    writer.save()
+                    writer2.save()
+
+
+                    break
+            if number2==3:
+                print("sad face")
+                break
+            else:
+                break
+    if number==3:
+    #is dosyasını ac ve tarihi oku
+        df = pd.read_excel('worker.xlsx')
+
+        worker_name=df['Name'].tolist()
+        Job=df["Job"].tolist()
+        Amount=df["Amount"].tolist()
+        Tarih=df["Tarih"].tolist()
+
+        temp_worker_name=(str(input("Çalışan adı: ")))
+        temp_Job=(str(input("Yaptığı iş: ")))
+        temp_Amount=(int(input("Adet: ")))
+
+        if temp_Job=="cc":
+            boya1.add(99999999)
+            boya2.add(88888888)
+            boya1.update()
+            boya2.update()
+        else:
+            print("nooo")
+        #Excele aktar
+        worker_name.append(temp_worker_name)
+        Job.append(temp_Job)
+        Amount.append(temp_Amount)
+        Tarih.append(d1)
+
+        p = zip(worker_name, Job, Amount,Tarih)
+        df2 = DataFrame(p)
+        df2.columns = ["Name", "Job", "Amount","Tarih"]
+
+        writer = pd.ExcelWriter('worker.xlsx', engine='xlsxwriter')
+        df2.to_excel(writer, sheet_name='Sheet1')
+
+        writer.save()
+
